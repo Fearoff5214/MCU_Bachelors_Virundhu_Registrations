@@ -1,0 +1,114 @@
+@import "tailwindcss";
+
+/* ---------- Neo-Kovai design tokens: change the palette here ---------- */
+@theme {
+  --color-void: #07070c;
+  --color-night: #0e0e18;
+  --color-panel: #141423;
+  --color-line: #ffffff1a;
+  --color-ink: #f4f4fb;
+  --color-mute: #9a9ab5;
+
+  --color-magenta: #ff2e88;
+  --color-cyan: #00e5ff;
+  --color-lime: #c6ff00;
+  --color-saffron: #ff9f1c;
+  --color-danger: #ff3b5c;
+
+  --font-display: var(--font-space), ui-sans-serif, system-ui;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui;
+  --font-tamil: var(--font-tamil), var(--font-inter), sans-serif;
+
+  --animate-aurora: aurora 18s ease-in-out infinite alternate;
+  --animate-shimmer: shimmer 3.5s linear infinite;
+  --animate-pulse-live: pulse-live 1.4s ease-in-out infinite;
+
+  @keyframes aurora {
+    0% { transform: translate3d(-10%, -5%, 0) rotate(0deg) scale(1); }
+    100% { transform: translate3d(10%, 5%, 0) rotate(25deg) scale(1.15); }
+  }
+  @keyframes shimmer {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 300% 50%; }
+  }
+  @keyframes pulse-live {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 #ff3b5c99; }
+    50% { opacity: .7; box-shadow: 0 0 0 6px #ff3b5c00; }
+  }
+}
+
+:root { color-scheme: dark; }
+
+html, body {
+  background: var(--color-void);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Faint grid that every page sits on */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, #ffffff08 1px, transparent 1px),
+    linear-gradient(to bottom, #ffffff08 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse at 50% 0%, #000 30%, transparent 75%);
+}
+
+.glass {
+  background: linear-gradient(160deg, #ffffff10, #ffffff04);
+  border: 1px solid var(--color-line);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.neon-text {
+  background: linear-gradient(90deg, var(--color-cyan), var(--color-magenta), var(--color-saffron));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Holographic animated border, used on ticket cards and primary panels */
+.holo-border {
+  position: relative;
+  isolation: isolate;
+}
+.holo-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1.5px;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--color-cyan), var(--color-magenta), var(--color-lime), var(--color-saffron), var(--color-cyan));
+  background-size: 300% 100%;
+  animation: var(--animate-shimmer);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  z-index: -1;
+}
+
+/* Glitch effect for event titles */
+.glitch { position: relative; }
+.glitch::before, .glitch::after {
+  content: attr(data-text);
+  position: absolute; inset: 0;
+  pointer-events: none;
+}
+.glitch::before { color: var(--color-cyan); transform: translate(2px, 0); mix-blend-mode: screen; animation: glitch-a 3s infinite steps(1); }
+.glitch::after { color: var(--color-magenta); transform: translate(-2px, 0); mix-blend-mode: screen; animation: glitch-b 3s infinite steps(1); }
+@keyframes glitch-a { 0%, 92%, 100% { clip-path: inset(0 0 100% 0); } 93% { clip-path: inset(20% 0 55% 0); } 96% { clip-path: inset(65% 0 10% 0); } }
+@keyframes glitch-b { 0%, 90%, 100% { clip-path: inset(0 0 100% 0); } 91% { clip-path: inset(50% 0 30% 0); } 95% { clip-path: inset(10% 0 75% 0); } }
+
+/* Ticket perforation between body and stub */
+.perforation {
+  background-image: radial-gradient(circle, var(--color-void) 5px, transparent 5.5px);
+  background-size: 18px 14px;
+  background-repeat: repeat-x;
+  background-position: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
